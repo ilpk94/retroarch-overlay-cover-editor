@@ -144,6 +144,31 @@ body.fs #fsmsg:not([hidden]){display:block;position:absolute;left:50%;top:calc(5
 .vl .star{color:var(--ac);font-weight:700}
 .vl .va{display:flex;gap:6px}
 [hidden]{display:none!important}
+#dcov{width:min(96vw,860px);max-height:92vh;overflow:auto;padding:18px}
+#dcov .cv-head{display:flex;gap:10px;align-items:center;justify-content:space-between}
+#dcov .cv-head h2{margin:0}
+#dcov .cv-drop{border:2px dashed var(--bd);border-radius:12px;background:var(--fld);padding:28px 16px;text-align:center;cursor:pointer}
+#dcov .cv-drop.over,#dcov .cv-drop:focus-visible{border-color:var(--ac);background:var(--acs)}
+#dcov .cv-opts{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+#dcov .cv-opts label{display:flex;gap:6px;align-items:center;font-size:14px}
+#dcov .cv-opts input[type=number]{width:84px;min-height:36px;padding:0 8px;border:1px solid var(--bd);border-radius:8px;background:var(--fld);color:var(--tx)}
+#dcov .cv-opts input[type=checkbox]{width:auto}
+#dcov .cv-bar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#dcov .cv-meta{font-size:13px;color:var(--mu)}
+#dcov details.cv-bulk{border:1px solid var(--bd);border-radius:10px;padding:8px 12px;background:var(--fld)}
+#dcov .cv-bulk>.cv-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+#dcov .cv-bulk input[type=text]{flex:1;min-width:130px;min-height:36px;padding:0 8px;border:1px solid var(--bd);border-radius:8px;background:var(--pn);color:var(--tx)}
+#dcov .cv-list{display:grid;gap:8px}
+#dcov .cv-item{display:flex;gap:12px;align-items:center;background:var(--fld);border:1px solid var(--bd);border-radius:10px;padding:10px}
+#dcov .cv-item img{width:72px;height:72px;object-fit:contain;background:repeating-conic-gradient(var(--bd) 0 25%,transparent 0 50%) 0 0/12px 12px;border-radius:6px;flex:none}
+#dcov .cv-info{flex:1;min-width:0}
+#dcov .cv-namerow{display:flex;gap:6px;align-items:center}
+#dcov .cv-namerow .cv-ext{color:var(--mu);flex:none}
+#dcov textarea.cv-name{flex:1;min-width:0;width:100%;resize:none;overflow:hidden;display:block;padding:10px;border:1px solid var(--bd);border-radius:8px;background:var(--pn);color:var(--tx);font:inherit;line-height:1.3}
+#dcov .cv-acts{display:flex;gap:8px;flex:none}
+#dcov .cv-hint{font-size:13px;color:var(--mu);margin:0;border-top:1px solid var(--bd);padding-top:12px}
+#dcov .cv-hint code{background:var(--fld);padding:1px 5px;border-radius:4px;border:1px solid var(--bd)}
+@media(max-width:600px){#dcov .cv-item{flex-wrap:wrap}#dcov .cv-item img{width:56px;height:56px}#dcov .cv-info{flex:1 1 0}#dcov .cv-acts{width:100%}#dcov .cv-acts button{flex:1}}
 </style>
 </head>
 <body>
@@ -153,6 +178,7 @@ body.fs #fsmsg:not([hidden]){display:block;position:absolute;left:50%;top:calc(5
     <select id="lsel" class="btn" aria-label="Lingua / Language"><option value="it">Italiano</option><option value="en">English</option></select>
     <label class="btn fbtn"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Apri .cfg<input type="file" id="fcfg" accept=".cfg,.txt"></label>
     <label class="btn fbtn"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.5"/><path d="M21 16l-5-5-8 8"/></svg>Sfondo<input type="file" id="fbg" accept="image/*"></label>
+    <button id="bcov" class="btn"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.5"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>Copertine</button>
     <button id="bundo" class="btn"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg>Annulla</button>
     <button id="bsave" class="btn p"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8"/><path d="M8 21v-7h8v7"/></svg>Salva .cfg</button>
   </div>
@@ -322,6 +348,37 @@ body.fs #fsmsg:not([hidden]){display:block;position:absolute;left:50%;top:calc(5
       <button value="no">No, solo questa</button>
     </div>
   </form>
+</dialog>
+<dialog id="dcov">
+  <div style="display:grid;gap:12px">
+    <div class="cv-head"><h2>Copertine per RetroArch</h2><button class="btn sm" id="cvx" type="button">✕ Chiudi</button></div>
+    <p class="hint">Ridimensiona le immagini alla larghezza scelta e le salva in PNG (o nel formato originale, se lo scegli). Tutto avviene nel browser, nessun file viene caricato online.</p>
+    <div class="cv-drop" id="cvdrop" tabindex="0" role="button" aria-label="Scegli le immagini">
+      <strong>Trascina qui immagini o file ZIP</strong><br>oppure tocca per sceglierli (anche più di uno)
+      <input type="file" id="cvfile" accept="image/*,.zip,application/zip" multiple hidden>
+    </div>
+    <div class="cv-opts">
+      <label>Larghezza (px) <input type="number" id="cvw" value="512" min="16" max="4096"></label>
+      <label><input type="checkbox" id="cvnoup"> Non ingrandire le immagini più piccole</label>
+      <label><input type="checkbox" id="cvsan" checked> Sostituisci i caratteri vietati da RetroArch</label>
+      <label><input type="checkbox" id="cvkeep"> Mantieni il formato originale (JPG, WebP…)</label>
+    </div>
+    <div class="cv-bar">
+      <span id="cvcount" class="cv-meta"></span>
+      <span class="row" style="flex:none"><button class="btn sm" id="cvclear" disabled>Svuota</button><button class="btn sm p" id="cvzip" disabled>Scarica tutto (ZIP)</button></span>
+    </div>
+    <details class="cv-bulk">
+      <summary>Rinomina in blocco</summary>
+      <div class="cv-row">
+        <input type="text" id="cvfind" placeholder="Testo da cercare" aria-label="Testo da cercare">
+        <input type="text" id="cvrepl" placeholder="Sostituisci con (vuoto = elimina)" aria-label="Sostituisci con">
+        <button class="btn sm" id="cvapply">Applica a tutti</button>
+        <button class="btn sm" id="cvreset">Ripristina originali</button>
+      </div>
+    </details>
+    <div class="cv-list" id="cvlist"></div>
+    <p class="cv-hint" id="cvhint"></p>
+  </div>
 </dialog>
 <script>
 let LANG='it';const tr=(a,b)=>LANG==='en'?b:a;
@@ -1036,6 +1093,207 @@ addEventListener('orientationchange',()=>{if(isFs())setTimeout(draw,300)});
 addEventListener('keydown',e=>{if(e.key==='Escape')fsClose()});
 
 
+/* ---- Copertine RetroArch (ridimensiona immagini / ZIP) ---- */
+(function(){
+  var g=function(id){return document.getElementById(id)};
+  var items=[],dlg=g('dcov'),drop=g('cvdrop'),file=g('cvfile'),list=g('cvlist');
+  var MIME={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',bmp:'image/bmp'};
+
+  g('bcov').onclick=function(){dlg.showModal()};
+  g('cvx').onclick=function(){dlg.close()};
+  dlg.addEventListener('keydown',function(e){e.stopPropagation()});
+  dlg.addEventListener('dragover',function(e){e.preventDefault()});
+  dlg.addEventListener('drop',function(e){e.preventDefault()});
+
+  drop.onclick=function(){file.click()};
+  drop.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();file.click()}};
+  ['dragenter','dragover'].forEach(function(t){drop.addEventListener(t,function(e){e.preventDefault();drop.classList.add('over')})});
+  ['dragleave','drop'].forEach(function(t){drop.addEventListener(t,function(e){e.preventDefault();drop.classList.remove('over')})});
+  drop.addEventListener('drop',function(e){add(e.dataTransfer.files)});
+  file.onchange=function(){add(file.files);file.value=''};
+  g('cvw').onchange=g('cvnoup').onchange=g('cvkeep').onchange=function(){Promise.all(items.map(render)).then(draw)};
+  g('cvsan').onchange=function(){items.forEach(function(it){it.name=cleanName(it.base)});draw()};
+  g('cvclear').onclick=function(){items.forEach(function(it){if(it.url)URL.revokeObjectURL(it.url)});items=[];draw()};
+  g('cvzip').onclick=makeZip;
+  g('cvapply').onclick=function(){
+    var f=g('cvfind').value;if(!f)return;
+    var re=new RegExp(f.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi'),r=g('cvrepl').value;
+    items.forEach(function(it){it.name=cleanName((it.name.replace(re,function(){return r}).trim())||it.base)});
+    draw();
+  };
+  g('cvreset').onclick=function(){items.forEach(function(it){it.name=cleanName(it.base)});draw()};
+
+  function cleanName(n){return g('cvsan').checked?n.replace(/[&*\/:`<>?\\|]/g,'_'):n}
+  function finalName(it){return cleanName((it.name||'').trim())||cleanName(it.base)}
+  function targetW(){return Math.max(16,parseInt(g('cvw').value,10)||512)}
+
+  function add(files){
+    Array.prototype.forEach.call(files,function(f){
+      if(/\.zip$/i.test(f.name)||f.type==='application/zip'||f.type==='application/x-zip-compressed'){
+        readZip(f).then(function(fs){addImages(fs)}).catch(function(e){
+          alert(tr('Impossibile leggere '+f.name+': '+e.message,'Unable to read '+f.name+': '+e.message));
+        });
+      }else addImages([f]);
+    });
+  }
+
+  function addImages(files){
+    files.forEach(function(f){
+      if(!/^image\//.test(f.type))return;
+      var base=f.name.replace(/\.[^.]+$/,'');
+      var it={f:f,base:base,name:cleanName(base),blob:null,w:0,h:0,ext0:(f.name.split('.').pop()||'png').toLowerCase(),ext:'png'};
+      items.push(it);
+      render(it).then(draw);
+    });
+    draw();
+  }
+
+  /* Lettura ZIP (stored e deflate) senza librerie esterne / ZIP reading (stored and deflate), no libraries */
+  function readZip(f){
+    if(typeof DecompressionStream==='undefined')return Promise.reject(new Error(tr('il browser non supporta la decompressione ZIP, aggiornalo','your browser does not support ZIP decompression, please update it')));
+    return f.arrayBuffer().then(function(buf){
+      var v=new DataView(buf),u8=new Uint8Array(buf),dec=new TextDecoder(),e=-1;
+      for(var i=buf.byteLength-22;i>=Math.max(0,buf.byteLength-65557);i--){if(v.getUint32(i,true)===0x06054b50){e=i;break}}
+      if(e<0)throw new Error(tr('archivio ZIP non valido','invalid ZIP archive'));
+      var n=v.getUint16(e+10,true),p=v.getUint32(e+16,true),jobs=[];
+      for(var k=0;k<n;k++){
+        if(v.getUint32(p,true)!==0x02014b50)break;
+        var method=v.getUint16(p+10,true),cs=v.getUint32(p+20,true),nl=v.getUint16(p+28,true),el=v.getUint16(p+30,true),cl=v.getUint16(p+32,true),lo=v.getUint32(p+42,true);
+        var path=dec.decode(u8.subarray(p+46,p+46+nl));
+        p+=46+nl+el+cl;
+        var base=path.split('/').pop(),ext=(base.split('.').pop()||'').toLowerCase();
+        if(!base||/\/$/.test(path)||/(^|\/)(__MACOSX|\.)/.test(path)||!MIME[ext])continue;
+        var ds=lo+30+v.getUint16(lo+26,true)+v.getUint16(lo+28,true);
+        jobs.push(unpack(u8.subarray(ds,ds+cs),method,base,MIME[ext]));
+      }
+      return Promise.all(jobs);
+    });
+  }
+
+  function unpack(bytes,method,name,type){
+    if(method===0)return Promise.resolve(new File([bytes],name,{type:type}));
+    if(method!==8)return Promise.reject(new Error(tr('compressione non supportata','unsupported compression')));
+    return new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).blob()
+      .then(function(b){return new File([b],name,{type:type})});
+  }
+
+  function render(it){
+    return createImageBitmap(it.f).then(function(bmp){
+      var W=targetW();
+      if(g('cvnoup').checked&&bmp.width<W)W=bmp.width;
+      var H=Math.max(1,Math.round(bmp.height*W/bmp.width));
+      /* riduzione a gradini per una qualità migliore / stepwise downscale for better quality */
+      var cur=bmp,cw=bmp.width,ch=bmp.height;
+      while(cw/2>W){
+        var nw=Math.round(cw/2),nh=Math.round(ch/2);
+        var c=document.createElement('canvas');c.width=nw;c.height=nh;
+        var x=c.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(cur,0,0,nw,nh);
+        cur=c;cw=nw;ch=nh;
+      }
+      var out=document.createElement('canvas');out.width=W;out.height=H;
+      var cx=out.getContext('2d'),keep=g('cvkeep').checked,type=keep?it.f.type:'image/png';
+      if(type==='image/jpeg'){cx.fillStyle='#fff';cx.fillRect(0,0,W,H)}
+      cx.imageSmoothingQuality='high';cx.drawImage(cur,0,0,W,H);
+      return new Promise(function(res){
+        out.toBlob(function(b){
+          if(it.url)URL.revokeObjectURL(it.url);
+          it.blob=b;it.w=W;it.h=H;it.url=URL.createObjectURL(b);
+          it.ext=(keep&&b.type===type)?it.ext0:'png';res();
+        },type,0.92);
+      });
+    }).catch(function(){it.err=true});
+  }
+
+  function draw(){
+    list.innerHTML='';
+    items.forEach(function(it,i){
+      var d=document.createElement('div');d.className='cv-item';
+      if(!it.blob){
+        d.textContent=it.err?tr('Impossibile leggere '+it.f.name,'Unable to read '+it.f.name):tr('Elaborazione di '+it.f.name+'…','Processing '+it.f.name+'…');
+        list.appendChild(d);return;
+      }
+      var img=new Image();img.src=it.url;img.alt='';
+      var info=document.createElement('div');info.className='cv-info';
+      var inp=document.createElement('textarea');inp.rows=1;inp.className='cv-name';inp.value=it.name;
+      inp.setAttribute('aria-label',tr('Nome file','File name'));
+      inp.fit=function(){inp.style.height='auto';inp.style.height=inp.scrollHeight+2+'px'};
+      inp.oninput=function(){var v=inp.value.replace(/[\r\n]+/g,' ');if(v!==inp.value)inp.value=v;it.name=v;inp.fit()};
+      inp.onfocus=function(){inp.select()};
+      inp.onchange=function(){it.name=finalName(it);inp.value=it.name;inp.fit()};
+      inp.onkeydown=function(e){
+        if(e.key!=='Enter')return;
+        e.preventDefault();inp.blur();
+        var all=list.querySelectorAll('textarea.cv-name'),nx=all[Array.prototype.indexOf.call(all,inp)+1];
+        if(nx)nx.focus();
+      };
+      var row=document.createElement('div');row.className='cv-namerow';
+      var ex=document.createElement('span');ex.className='cv-ext';ex.textContent='.'+it.ext;
+      row.appendChild(inp);row.appendChild(ex);
+      var m=document.createElement('div');m.className='cv-meta';
+      m.textContent=it.w+' × '+it.h+' px · '+Math.round(it.blob.size/1024)+' KB · .'+it.ext;
+      info.appendChild(row);info.appendChild(m);
+      var dl=document.createElement('button');dl.className='btn sm';dl.textContent=tr('Scarica','Download');
+      dl.onclick=function(){save(it.blob,finalName(it)+'.'+it.ext)};
+      var rm=document.createElement('button');rm.className='btn sm';rm.textContent=tr('Rimuovi','Remove');
+      rm.onclick=function(){if(it.url)URL.revokeObjectURL(it.url);items.splice(items.indexOf(it),1);draw()};
+      var acts=document.createElement('div');acts.className='cv-acts';acts.appendChild(dl);acts.appendChild(rm);
+      d.appendChild(img);d.appendChild(info);d.appendChild(acts);
+      list.appendChild(d);inp.fit();
+    });
+    var n=items.filter(function(it){return it.blob}).length;
+    g('cvcount').textContent=n?(n===1?tr('1 immagine pronta','1 image ready'):tr(n+' immagini pronte',n+' images ready')):tr('Nessuna immagine','No images');
+    g('cvzip').disabled=g('cvclear').disabled=!n;
+  }
+
+  /* testo con markup: ricostruito con tr() a ogni cambio lingua / markup text rebuilt with tr() on every language change */
+  function statics(){
+    g('cvhint').innerHTML=tr(
+      'Il nome del file deve coincidere con il nome del gioco nella playlist di RetroArch, per esempio <code>Super Mario World (Europe).png</code>. Metti i file in <code>thumbnails/NomeSistema/Named_Boxarts/</code>. I caratteri <code>&amp; * / : ` &lt; &gt; ? \\ |</code> diventano <code>_</code>.',
+      'The file name must match the game name in the RetroArch playlist, for example <code>Super Mario World (Europe).png</code>. Put the files in <code>thumbnails/SystemName/Named_Boxarts/</code>. The characters <code>&amp; * / : ` &lt; &gt; ? \\ |</code> become <code>_</code>.');
+  }
+  window.covRefresh=function(){statics();draw()};
+
+  function save(blob,name){
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},2000);
+  }
+
+  /* ZIP senza compressione (i PNG sono già compressi) / uncompressed ZIP (PNGs are already compressed) */
+  var T=(function(){var t=[];for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+  function crc(u){var c=0xFFFFFFFF;for(var i=0;i<u.length;i++)c=T[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
+
+  function makeZip(){
+    var enc=new TextEncoder(),used={},parts=[],cen=[],off=0;
+    var ready=items.filter(function(it){return it.blob});
+    Promise.all(ready.map(function(it){return it.blob.arrayBuffer()})).then(function(bufs){
+      ready.forEach(function(it,i){
+        var name=finalName(it),k=name.toLowerCase();
+        if(used[k]){used[k]++;name+=' ('+used[k]+')'}else used[k]=1;
+        name+='.'+it.ext;
+        var nb=enc.encode(name),data=new Uint8Array(bufs[i]),c=crc(data);
+        var h=new DataView(new ArrayBuffer(30));
+        h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);
+        h.setUint32(14,c,true);h.setUint32(18,data.length,true);h.setUint32(22,data.length,true);
+        h.setUint16(26,nb.length,true);
+        parts.push(h.buffer,nb,data);
+        var e=new DataView(new ArrayBuffer(46));
+        e.setUint32(0,0x02014b50,true);e.setUint16(4,20,true);e.setUint16(6,20,true);e.setUint16(8,0x0800,true);
+        e.setUint32(16,c,true);e.setUint32(20,data.length,true);e.setUint32(24,data.length,true);
+        e.setUint16(28,nb.length,true);e.setUint32(42,off,true);
+        cen.push(e.buffer,nb);
+        off+=30+nb.length+data.length;
+      });
+      var cs=0;cen.forEach(function(p){cs+=p.byteLength!==undefined?p.byteLength:p.length});
+      var z=new DataView(new ArrayBuffer(22));
+      z.setUint32(0,0x06054b50,true);z.setUint16(8,ready.length,true);z.setUint16(10,ready.length,true);
+      z.setUint32(12,cs,true);z.setUint32(16,off,true);
+      save(new Blob(parts.concat(cen,[z.buffer]),{type:'application/zip'}),'Named_Boxarts.zip');
+    });
+  }
+  window.covRefresh();
+})();
+
 fillOv();
 
 /* ---- Lingua / Language (IT / EN) ---- */
@@ -1090,7 +1348,17 @@ const EN=Object.fromEntries([
 [`Le altre differenze tra le due versioni restano come sono.`,`Other differences between the two versions stay as they are.`],
 [`Sì, applica anche all'altra`,`Yes, apply to the other too`],[`No, solo questa`,`No, only this one`],
 [`Versioni nel file`,`Versions in the file`],
-[`La versione con la stella ★ è quella che si apre all'avvio del gioco. Puoi sceglierne un'altra o eliminare quelle che non ti servono.`,`The version with the star ★ is the one that opens when the game starts. You can pick another one or delete the ones you don't need.`]
+[`La versione con la stella ★ è quella che si apre all'avvio del gioco. Puoi sceglierne un'altra o eliminare quelle che non ti servono.`,`The version with the star ★ is the one that opens when the game starts. You can pick another one or delete the ones you don't need.`],
+[`Copertine`,`Covers`],[`Copertine per RetroArch`,`Covers for RetroArch`],[`✕ Chiudi`,`✕ Close`],
+[`Ridimensiona le immagini alla larghezza scelta e le salva in PNG (o nel formato originale, se lo scegli). Tutto avviene nel browser, nessun file viene caricato online.`,`Resizes the images to the chosen width and saves them as PNG (or in the original format, if you choose so). Everything happens in your browser, no file is uploaded online.`],
+[`Scegli le immagini`,`Choose images`],[`Trascina qui immagini o file ZIP`,`Drop images or ZIP files here`],
+[`oppure tocca per sceglierli (anche più di uno)`,`or tap to choose them (more than one is fine)`],
+[`Larghezza (px)`,`Width (px)`],[`Non ingrandire le immagini più piccole`,`Do not enlarge smaller images`],
+[`Sostituisci i caratteri vietati da RetroArch`,`Replace characters forbidden by RetroArch`],
+[`Mantieni il formato originale (JPG, WebP…)`,`Keep the original format (JPG, WebP…)`],
+[`Svuota`,`Clear`],[`Scarica tutto (ZIP)`,`Download all (ZIP)`],[`Rinomina in blocco`,`Bulk rename`],
+[`Testo da cercare`,`Text to find`],[`Sostituisci con (vuoto = elimina)`,`Replace with (empty = delete)`],[`Sostituisci con`,`Replace with`],
+[`Applica a tutti`,`Apply to all`],[`Ripristina originali`,`Restore originals`]
 ]);
 const ATTRS=['placeholder','aria-label','title','label'],TITLE_IT=document.title;
 function applyLang(){
@@ -1115,6 +1383,7 @@ function setLang(l){
   applyLang();
   $('repimg').dataset.k='';$('simg').dataset.k='';dirKey='';
   fillOv();fsBarSync();
+  if(window.covRefresh)covRefresh();
 }
 $('lsel').onchange=e=>setLang(e.target.value);
 const dLang=/^it/i.test(navigator.language||'')?'it':'en';
