@@ -94,6 +94,9 @@ li small{color:var(--mu)}li.on{background:var(--ac);color:var(--ac2)}li.on small
 .im .vis{fill:transparent;stroke:rgba(255,255,255,.35)}
 .k{cursor:grab}.on .vis{stroke:#fff;stroke-width:3}
 .hd{fill:#fff;stroke:#0d9488;stroke-width:3;cursor:nwse-resize}
+.cbx{display:flex;flex-wrap:wrap;gap:6px}
+.cbk{min-height:38px;min-width:44px;padding:0 10px;border:1px solid var(--bd);border-radius:9px;background:var(--fld);color:var(--tx);font-weight:600;font-size:14px;cursor:pointer}
+.cbk.on{background:var(--ac);border-color:var(--ac);color:var(--ac2)}
 text{fill:#fff;font:700 13px system-ui,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
 dialog{border:1px solid var(--bd);border-radius:18px;background:var(--pn);color:var(--tx);padding:22px;width:min(92vw,400px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
 dialog::backdrop{background:rgba(0,0,0,.55)}
@@ -196,7 +199,7 @@ body.fs #fsmsg:not([hidden]){display:block;position:absolute;left:50%;top:calc(5
       <div id="fstop"><select id="fsver" aria-label="Versione"></select><span id="fsn"></span></div>
       <div id="fsmsg" hidden></div>
       <div id="fsheet" hidden>
-        <div id="fsh-add" hidden><label class="fld">Funzione<select id="fsadd"></select></label><button class="btn p" id="fsaddgo">+ Aggiungi a questa versione</button></div>
+        <div id="fsh-add" hidden><label class="fld">Funzione<select id="fsadd"></select></label><button class="btn p" id="fsaddgo">+ Aggiungi a questa versione</button><span class="hint">Oppure crea un tasto combinato (es. A+B)</span><div class="cbx"></div><button class="btn" id="fscombogo">+ Crea tasto combinato</button></div>
         <div id="fsh-rep" hidden><label class="fld">Nuova funzione (cambia anche l'icona)<select id="fsrep"></select></label><button class="btn p" id="fsrepgo">Sostituisci</button></div>
         <div id="fsh-img" hidden><label class="fld">Cartella delle immagini<input id="fsdir" list="dirlist" placeholder="es. img/clear"></label><label class="fld">Applica a<select id="fsscope"><option value="sel">Solo i tasti selezionati</option><option value="ver">Tutti i tasti di questa versione</option><option value="all">Tutti i tasti, in tutte le versioni</option></select></label><button class="btn p" id="fsdirgo">Applica cartella</button></div>
       </div>
@@ -255,9 +258,16 @@ body.fs #fsmsg:not([hidden]){display:block;position:absolute;left:50%;top:calc(5
     </div>
     <div class="card">
       <h2>Aggiungi tasto</h2>
-      <label class="fld">Funzione<select id="addsel"><optgroup label="Azioni di RetroArch"><option value="save_state">Salva stato</option><option value="load_state">Carica stato</option><option value="toggle_fast_forward">Velocizza (attiva/disattiva)</option><option value="hold_fast_forward">Velocizza (tieni premuto)</option><option value="toggle_slowmotion">Rallenta (attiva/disattiva)</option><option value="hold_slowmotion">Rallenta (tieni premuto)</option><option value="rewind">Riavvolgi</option><option value="pause_toggle">Pausa</option><option value="frame_advance">Avanza di un frame</option><option value="state_slot_increase">Slot salvataggio +</option><option value="state_slot_decrease">Slot salvataggio −</option><option value="reset">Reset</option><option value="screenshot">Screenshot</option><option value="fps_toggle">Mostra FPS</option><option value="menu_toggle">Menu di RetroArch</option><option value="overlay_next">Overlay successivo</option><option value="mute">Muto</option><option value="volume_up">Volume +</option><option value="volume_down">Volume −</option><option value="exit_emulator">Esci dall'emulatore</option></optgroup><optgroup label="Tasti del gioco"><option value="a">A</option><option value="b">B</option><option value="x">X</option><option value="y">Y</option><option value="l">L</option><option value="r">R</option><option value="l2">L2</option><option value="r2">R2</option><option value="l3">L3</option><option value="r3">R3</option><option value="start">start</option><option value="select">select</option></optgroup></select></label>
+      <label class="fld">Funzione<select id="addsel"><optgroup label="Azioni di RetroArch"><option value="save_state">Salva stato</option><option value="load_state">Carica stato</option><option value="toggle_fast_forward">Velocizza (attiva/disattiva)</option><option value="hold_fast_forward">Velocizza (tieni premuto)</option><option value="toggle_slowmotion">Rallenta (attiva/disattiva)</option><option value="hold_slowmotion">Rallenta (tieni premuto)</option><option value="rewind">Riavvolgi</option><option value="pause_toggle">Pausa</option><option value="frame_advance">Avanza di un frame</option><option value="state_slot_increase">Slot salvataggio +</option><option value="state_slot_decrease">Slot salvataggio −</option><option value="reset">Reset</option><option value="screenshot">Screenshot</option><option value="fps_toggle">Mostra FPS</option><option value="menu_toggle">Menu di RetroArch</option><option value="overlay_next">Overlay successivo</option><option value="mute">Muto</option><option value="volume_up">Volume +</option><option value="volume_down">Volume −</option><option value="exit_emulator">Esci dall'emulatore</option></optgroup><optgroup label="Tasti del gioco"><option value="a">A</option><option value="b">B</option><option value="x">X</option><option value="y">Y</option><option value="l">L</option><option value="r">R</option><option value="l2">L2</option><option value="r2">R2</option><option value="l3">L3</option><option value="r3">R3</option><option value="start">start</option><option value="select">select</option></optgroup><optgroup label="Combinazioni (premono più tasti)"><option value="a|b">A+B</option><option value="a|x">A+X</option><option value="a|y">A+Y</option><option value="b|x">B+X</option><option value="b|y">B+Y</option><option value="x|y">X+Y</option><option value="l|r">L+R</option><option value="l2|r2">L2+R2</option><option value="start|select">START+SELECT</option></optgroup></select></label>
       <button id="addbtn" class="btn p">+ Aggiungi a questa versione</button>
       <p class="hint" id="addnote">Il tasto compare in un punto libero: trascinalo dove vuoi. Se non l'hai già caricata nel file, la grafica va impostata in Avanzate › Immagine.</p>
+    </div>
+    <div class="card" id="combocard">
+      <h2>Tasto combinato</h2>
+      <p class="hint">Un solo tasto che preme più tasti insieme (es. A+B). Seleziona due o più tasti, poi crea il tasto.</p>
+      <div class="cbx"></div>
+      <button id="combobtn" class="btn p">+ Crea tasto combinato</button>
+      <p class="hint" id="combonote">Il nuovo tasto compare in un punto libero con un'icona "A+B": trascinalo dove vuoi. Puoi cambiarne l'immagine da "Immagine del tasto".</p>
     </div>
     <div class="card" id="dircard">
       <h2>Cartella delle immagini</h2>
@@ -389,6 +399,8 @@ const newModel=()=>({top:[],overlays:[newOv('landscape')]});
 const gp=(o,k)=>{const p=o.props.find(p=>p[0]===k);return p?p[1]:''};
 const sp=(o,k,v)=>{const p=o.props.find(p=>p[0]===k);p?p[1]=v:o.props.push([k,v])};
 const isUI=a=>/^(menu|overlay_next|toggle|hold_|save_state|load_state|state_slot|rewind|pause|frame_advance|reset|screenshot|fps_|mute|volume|exit|shader)/.test(a.n), isSS=a=>/^(start|select)$/.test(a.n), isGame=a=>!isUI(a)&&!isSS(a);
+/* zona combinata = area nascosta tipo a|b senza immagine; con un'immagine invece è un vero tasto combinato */
+const isZone=d=>d.in.n.includes('|')&&!d.x.overlay;
 let orig=null,M=newModel(),cur=0,sel=-1,sels=new Set(),multi=false,bg='',fname='overlay.cfg',drag=null,hist=[];
 const O=()=>M.overlays[cur],D=()=>O().descs[sel];
 function fixSel(){
@@ -445,14 +457,14 @@ function draw(){
   if($('grd').checked)h+=gridSvg(W,H);
   let lb='';
   o.descs.forEach((d,i)=>{
-    const a=d.in,cx=a.x*W,cy=a.y*H,rw=a.w*W,rh=a.h*H,combo=a.n.includes('|'),on=sels.has(i);
+    const a=d.in,cx=a.x*W,cy=a.y*H,rw=a.w*W,rh=a.h*H,combo=isZone(d),on=sels.has(i);
     if(cx<-20||cx>W+20||cy<-20||cy>H+20||(combo&&!sc&&!on))return;
     const cl=combo?'c':isSS(a)?'s':isUI(a)?'m':'b',
       shp=(w,hh,c)=>a.s==='rect'
         ?`<rect x="${cx-w}" y="${cy-hh}" width="${w*2}" height="${hh*2}" rx="6" class="${c}"/>`
         :`<ellipse cx="${cx}" cy="${cy}" rx="${w}" ry="${hh}" class="${c}"/>`;
     const im=combo?null:imgOf(d);
-    h+=`<g data-i="${i}" class="k ${cl}${on?' on':''}${im?' im':''}">${im?`<image href="${im}" x="${cx-rw/rm}" y="${cy-rh/rm}" width="${2*rw/rm}" height="${2*rh/rm}" preserveAspectRatio="none" opacity=".9" style="pointer-events:none"/>`:''}${(on||combo)?shp(rw,rh,'hit'):''}${combo?'':shp(rw/rm,rh/rm,'vis')+(im?'':`<text x="${cx}" y="${cy}">${esc(a.n)}</text>`)}</g>`;
+    h+=`<g data-i="${i}" class="k ${cl}${on?' on':''}${im?' im':''}">${im?`<image href="${im}" x="${cx-rw/rm}" y="${cy-rh/rm}" width="${2*rw/rm}" height="${2*rh/rm}" preserveAspectRatio="none" opacity=".9" style="pointer-events:none"/>`:''}${(on||combo)?shp(rw,rh,'hit'):''}${combo?'':shp(rw/rm,rh/rm,'vis')+(im?'':`<text x="${cx}" y="${cy}">${esc(a.n.replace(/\|/g,'+'))}</text>`)}</g>`;
     if(on&&sels.size===1)lb=`<text x="${Math.min(W-60,Math.max(60,cx))}" y="${Math.max(12,cy-rh/rm-14)}" style="paint-order:stroke;stroke:#000;stroke-width:3px;font-size:11px">x ${(a.x*100).toFixed(1)}%  y ${(a.y*100).toFixed(1)}%</text>`;
   });
   if(sels.size&&D()){
@@ -841,20 +853,20 @@ function pvDraw(){
   const oo=$('pvor').checked&&orig?orig.overlays.find(x=>gp(x,'name')===gp(o,'name'))||null:null;
   let gh='',bt='';
   o.descs.forEach((d,i)=>{
-    const a=d.in;if(a.n.includes('|')||/_area$/.test(a.n))return;
+    const a=d.in;if(isZone(d)||/_area$/.test(a.n))return;
     const cx=a.x*W,cy=a.y*H,vw=a.w*W/rm,vh=a.h*H/rm,pr=hits.has(i),im=imgOf(d),
       col=isSS(a)?'240,176,60':isUI(a)?'160,164,175':'45,212,191';
     if(oo){const b=oo.descs[i]&&oo.descs[i].in;
       if(b&&b.n===a.n&&(Math.abs(b.x-a.x)>EPS||Math.abs(b.y-a.y)>EPS||Math.abs(b.w-a.w)>EPS||Math.abs(b.h-a.h)>EPS))
         gh+=SH(b.s,b.x*W,b.y*H,b.w*W/rm,b.h*H/rm,'fill="none" stroke="#f0b03c" stroke-width="2" stroke-dasharray="6 5"')+`<line x1="${b.x*W}" y1="${b.y*H}" x2="${cx}" y2="${cy}" stroke="#f0b03c" stroke-width="1.5" stroke-dasharray="3 4" opacity=".8"/>`;}
     if(im)bt+=`<image href="${im}" x="${cx-vw}" y="${cy-vh}" width="${2*vw}" height="${2*vh}" preserveAspectRatio="none" opacity="${pr?1:op}"/>`;
-    else bt+=SH(a.s,cx,cy,vw,vh,`fill="rgba(${col},${pr?.95:.55})" fill-opacity="${pr?1:op/.7}" stroke="rgba(255,255,255,.85)" stroke-width="2"`)+`<text x="${cx}" y="${cy}" style="font-size:${Math.max(9,Math.min(13,vw*.45))}px;opacity:${Math.min(1,op+.25)}">${esc(a.n)}</text>`;
+    else bt+=SH(a.s,cx,cy,vw,vh,`fill="rgba(${col},${pr?.95:.55})" fill-opacity="${pr?1:op/.7}" stroke="rgba(255,255,255,.85)" stroke-width="2"`)+`<text x="${cx}" y="${cy}" style="font-size:${Math.max(9,Math.min(13,vw*.45))}px;opacity:${Math.min(1,op+.25)}">${esc(a.n.replace(/\|/g,'+'))}</text>`;
     if(pr)bt+=SH(a.s,cx,cy,vw+3,vh+3,'fill="none" stroke="#fff" stroke-width="3"');
   });
   $('pvs').innerHTML=h+gh+bt;
   const ok=(W>=H)===($('orient').value==='landscape'),m=$('pvmsg');m.hidden=ok;
   if(!ok)m.textContent=$('orient').value==='landscape'?tr('Ruota il telefono in orizzontale per vedere questa versione','Rotate your phone to landscape to see this version'):tr('Ruota il telefono in verticale per vedere questa versione','Rotate your phone to portrait to see this version');
-  const names=[...hits].map(i=>o.descs[i].in.n),pp=$('pvpr');pp.hidden=!names.length;pp.textContent=names.join(', ');
+  const names=[...hits].map(i=>o.descs[i].in.n.replace(/\|/g,'+')),pp=$('pvpr');pp.hidden=!names.length;pp.textContent=names.join(', ');
 }
 async function pvOpen(){
   if(!O().descs.length)return alert(tr('Apri prima un file .cfg.','Open a .cfg file first.'));
@@ -882,7 +894,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape')pvClose()});
 
 /* ---- Aggiungi tasto ---- */
 function freeSpot(w,h){
-  const bx=O().descs.filter(d=>!/_area$/.test(d.in.n)&&!d.in.n.includes('|')).map(d=>d.in);
+  const bx=O().descs.filter(d=>!/_area$/.test(d.in.n)&&!isZone(d)).map(d=>d.in);
   for(let r=0;r<=40;r++)for(let c=0;c<=40;c++){
     const y=.12+((r%2?1:-1)*Math.ceil(r/2)*.0)+r*.02,x=.5+((c%2?1:-1)*Math.ceil(c/2)*.04);
     if(x<w||x>1-w||y<h||y>1-h)continue;
@@ -890,9 +902,37 @@ function freeSpot(w,h){
   }
   return[.5,.5];
 }
+/* ---- Tasti combinati (es. a|b: un solo tasto che ne preme più di uno) ---- */
+const CBK=['a','b','x','y','l','r','l2','r2','l3','r3','start','select'];
+let cbSel=new Set();
+function cbxBuild(){
+  const h=CBK.map(k=>`<button type="button" class="cbk${cbSel.has(k)?' on':''}" data-k="${k}" aria-pressed="${cbSel.has(k)}">${k.toUpperCase()}</button>`).join('');
+  document.querySelectorAll('.cbx').forEach(el=>el.innerHTML=h);
+}
+document.addEventListener('click',e=>{const b=e.target.closest('.cbk');if(!b)return;
+  const k=b.dataset.k;cbSel.has(k)?cbSel.delete(k):cbSel.add(k);cbxBuild()});
+function addCombo(keys){
+  const o=O();if(!o.descs.length)return tr('Apri prima un file .cfg.','Open a .cfg file first.');
+  keys=CBK.filter(k=>keys.includes(k));
+  if(keys.length<2)return tr('Scegli almeno due tasti.','Choose at least two buttons.');
+  const n=keys.join('|'),[W,H]=dims();snap();
+  const b=keys.map(k=>o.descs.find(d=>d.in.n===k)).find(Boolean);
+  const w=b?b.in.w:44/W,h=b?b.in.h:44/H,sh=b?b.in.s:'radial';
+  const r=pickIcon(n),[x,y]=freeSpot(w,h),d={in:{n,x,y,s:sh,w,h},x:{}};
+  if(r)d.x.overlay=r.path;
+  o.descs.push(d);sel=o.descs.length-1;sels=new Set([sel]);sync();draw();genFill();
+  const nm=keys.map(k=>k.toUpperCase()).join('+');
+  return tr('Creato il tasto "'+nm+'" '+(r?iconMsg(r,n):'')+'. Trascinalo dove vuoi.','Created the "'+nm+'" button '+(r?iconMsg(r,n):'')+'. Drag it wherever you like.');
+}
+$('combobtn').onclick=()=>{$('combonote').textContent=addCombo([...cbSel]);if(cbSel.size>=2)$('sc').scrollIntoView({block:'nearest'})};
+$('fscombogo').onclick=()=>toast(addCombo([...cbSel]));
+cbxBuild();
+
 $('addbtn').onclick=()=>{
   const o=O();if(!o.descs.length)return alert(tr('Apri prima un file .cfg.','Open a .cfg file first.'));
-  const n=$('addsel').value,[W,H]=dims();snap();
+  const n=$('addsel').value,[W,H]=dims();
+  if(n.includes('|')){$('addnote').textContent=addCombo(n.split('|'));$('sc').scrollIntoView({block:'nearest'});return}
+  snap();
   const twin=o.descs.find(d=>d.in.n===n);
   let w=twin?twin.in.w:44/W,h=twin?twin.in.h:44/H,sh=twin?twin.in.s:'radial';
   const r=pickIcon(n),[x,y]=freeSpot(w,h),d={in:{n,x,y,s:sh,w,h},x:{}};
@@ -946,6 +986,7 @@ const SYN={save_state:['save','salva'],load_state:['load','carica'],toggle_fast_
   menu_toggle:['menu'],overlay_next:['overlay','hide','next'],mute:['mute'],volume_up:['volume','vol'],volume_down:['volume','vol'],exit_emulator:['exit','quit']};
 const SUBT={state_slot_increase:['plus','inc','up'],state_slot_decrease:['minus','dec','down'],volume_up:['up','plus'],volume_down:['down','minus'],
   hold_fast_forward:['hold'],toggle_fast_forward:['toggle'],hold_slowmotion:['hold'],toggle_slowmotion:['toggle']};
+const CAB={start:'STA',select:'SEL'};
 const LBL={state_slot_increase:'SLOT+',state_slot_decrease:'SLOT−',toggle_slowmotion:'SLOW',hold_slowmotion:'SLOW',fps_toggle:'FPS',mute:'MUTE',
   volume_up:'VOL+',volume_down:'VOL−',exit_emulator:'EXIT',frame_advance:'FRAME',overlay_next:'NEXT',reset:'RESET'};
 function iconDir(){
@@ -990,21 +1031,22 @@ function mkIcon(fn){
   else if(fn==='menu_toggle')P('M36 46h56M36 64h56M36 82h56');
   else if(fn==='screenshot'){g.strokeRect(32,50,64,42);P('M50 50l6-10h16l6 10');g.beginPath();g.arc(64,71,12,0,Math.PI*2);g.stroke()}
   else{
-    const t=LBL[fn]||fn.replace(/_/g,' ').toUpperCase().slice(0,6);
-    g.font='bold '+(t.length>4?24:30)+'px sans-serif';g.textAlign='center';g.textBaseline='middle';g.lineWidth=1;g.fillText(t,64,66);
+    const t=fn.includes('|')?fn.split('|').map(k=>CAB[k]||k.toUpperCase()).join('+'):LBL[fn]||fn.replace(/_/g,' ').toUpperCase().slice(0,6);
+    g.font='bold '+(t.length>8?15:t.length>6?19:t.length>4?24:30)+'px sans-serif';g.textAlign='center';g.textBaseline='middle';g.lineWidth=1;g.fillText(t,64,66);
   }
   return c.toDataURL('image/png');
 }
-const GENOK=fn=>!!(SYN[fn]||LBL[fn]);
+const GENOK=fn=>!!(SYN[fn]||LBL[fn]||fn.includes('|'));
 function pickIcon(fn,forceGen){
+  const cb=fn.includes('|');
   if(!forceGen){
-    if(prefDir){const m0=matchIcon(fn,true);if(m0)return{how:'match',path:'"'+m0.path+'"',file:m0.base}}
+    if(prefDir&&!cb){const m0=matchIcon(fn,true);if(m0)return{how:'match',path:'"'+m0.path+'"',file:m0.base}}
     for(const o of M.overlays){const t=o.descs.find(x=>x.in.n===fn&&x.x.overlay);if(t)return{how:'known',path:t.x.overlay}}
-    const m=matchIcon(fn);if(m)return{how:'match',path:'"'+m.path+'"',file:m.base};
+    const m=cb?null:matchIcon(fn);if(m)return{how:'match',path:'"'+m.path+'"',file:m.base};
   }
   if(!GENOK(fn))return null;
   if(!gen[fn]){
-    const dir=iconDir(),file='hotkey_'+fn+'.png';
+    const dir=iconDir(),file=(cb?'combo_'+fn.replace(/\|/g,'_'):'hotkey_'+fn)+'.png';
     gen[fn]={file,url:mkIcon(fn),path:dir?dir+'/'+file:file};
     imgs[file.toLowerCase()]=gen[fn].url;
   }
@@ -1358,7 +1400,9 @@ const EN=Object.fromEntries([
 [`Mantieni il formato originale (JPG, WebP…)`,`Keep the original format (JPG, WebP…)`],
 [`Svuota`,`Clear`],[`Scarica tutto (ZIP)`,`Download all (ZIP)`],[`Rinomina in blocco`,`Bulk rename`],
 [`Testo da cercare`,`Text to find`],[`Sostituisci con (vuoto = elimina)`,`Replace with (empty = delete)`],[`Sostituisci con`,`Replace with`],
-[`Applica a tutti`,`Apply to all`],[`Ripristina originali`,`Restore originals`]
+[`Applica a tutti`,`Apply to all`],[`Ripristina originali`,`Restore originals`],
+[`Tasto combinato`,`Combo button`],[`Un solo tasto che preme più tasti insieme (es. A+B). Seleziona due o più tasti, poi crea il tasto.`,`A single button that presses several buttons at once (e.g. A+B). Select two or more buttons, then create the button.`],[`+ Crea tasto combinato`,`+ Create combo button`],
+[`Il nuovo tasto compare in un punto libero con un'icona "A+B": trascinalo dove vuoi. Puoi cambiarne l'immagine da "Immagine del tasto".`,`The new button appears in a free spot with an "A+B" icon: drag it wherever you like. You can change its image from "Button image".`],[`Combinazioni (premono più tasti)`,`Combos (press several buttons)`],[`Oppure crea un tasto combinato (es. A+B)`,`Or create a combo button (e.g. A+B)`]
 ]);
 const ATTRS=['placeholder','aria-label','title','label'],TITLE_IT=document.title;
 function applyLang(){
